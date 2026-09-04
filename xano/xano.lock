@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "objects": {
+    "app:intake": {
+      "guid": "b91d17cfc4c6aab29e2c4b050ebe1253",
+      "canonical": "intake",
+      "canonical_source": "code"
+    },
+    "dbo:access_log": {
+      "guid": "66e4b44a71780b4d9618b0a0e3d962ec"
+    },
+    "dbo:consents": {
+      "guid": "d8e8791d3ff5e475f7997d5173d14b8c"
+    },
+    "dbo:intake_cases": {
+      "guid": "fff43dace4e2213a30316b1e3c341c6e"
+    },
+    "dbo:patients": {
+      "guid": "cd4f6dd5f51dbecce618b5cb8dfe3921"
+    },
+    "dbo:triage_rules": {
+      "guid": "b50ba6af6f70d990bd26682ca5b15905"
+    },
+    "dbo:users": {
+      "guid": "157d4a98d979cf04b9ccdb98dfc15229"
+    },
+    "function:run_triage": {
+      "guid": "dc3fffe98e37939bacc8d532199b2271"
+    },
+    "query:intake|GET|access-log": {
+      "guid": "12e6e915f802a9b4ca11250765ff2c50"
+    },
+    "query:intake|GET|cases": {
+      "guid": "501a23cd02e5b37c1ac5ccb2b47b09a4"
+    },
+    "query:intake|GET|cases/{case_id}": {
+      "guid": "a39a7d3628286d8b7ed1ad1b7a6f779a"
+    },
+    "query:intake|GET|patients": {
+      "guid": "9cabd401be8c806ed17b868a5ca37522"
+    },
+    "query:intake|POST|agent/triage": {
+      "guid": "696f684ace10862dd3ec43f8b236469a"
+    },
+    "query:intake|POST|cases": {
+      "guid": "4bb0647f5dff4ca431a47bda96964972"
+    },
+    "query:intake|POST|cases/triage": {
+      "guid": "40b7561cbcad333b9fb668f7053490c5"
+    },
+    "query:intake|POST|cases/update": {
+      "guid": "bf6559b504931f8d72491046a61f800f"
+    },
+    "query:intake|POST|login": {
+      "guid": "d4f6534f7255e956f30bc0d0a34ac418"
+    },
+    "query:intake|POST|seed": {
+      "guid": "87c1cd8a60c384f4bed0ce023210f74a"
+    }
+  }
+}

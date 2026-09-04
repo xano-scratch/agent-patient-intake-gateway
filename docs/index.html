@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Patient Intake Gateway</title>
+    <meta
+      name="description"
+      content="A governed patient-intake API where a human and an AI agent call the same permissioned, logged endpoints. Same consent, masking, and triage rules, one shared audit trail."
+    />
+    <style>
+      :root {
+        --bg: #0a0a0a;
+        --panel: #161616;
+        --panel-2: #1e1e1e;
+        --border: #2a2a2a;
+        --fg: #fafafa;
+        --muted: #a1a1aa;
+        --accent: #ef4444;
+        --accent-2: #f59e0b;
+        --ok: #34d399;
+        --radius: 12px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: inherit; }
+      .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+      header.site { padding: 20px 0; border-bottom: 1px solid var(--border); }
+      header.site .wrap { display: flex; align-items: center; gap: 12px; }
+      .logo {
+        width: 34px; height: 34px; border-radius: 9px;
+        background: rgba(250, 250, 250, 0.08);
+        display: flex; align-items: center; justify-content: center; color: var(--fg);
+      }
+      .brand { font-weight: 650; letter-spacing: -0.01em; }
+      .hero { padding: 64px 0 32px; }
+      .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+      .badge {
+        font-size: 12px; padding: 4px 10px; border-radius: 999px;
+        background: var(--panel-2); border: 1px solid var(--border); color: var(--muted);
+      }
+      h1 { font-size: 42px; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 14px; }
+      .tagline { font-size: 19px; color: var(--muted); max-width: 640px; margin: 0 0 18px; }
+      .meta { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+      .meta strong { color: var(--fg); font-weight: 600; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 11px 20px; border-radius: 10px; font-weight: 600; font-size: 15px;
+        text-decoration: none; border: 1px solid transparent; cursor: pointer;
+      }
+      .btn.primary { background: var(--fg); color: #0a0a0a; }
+      .btn.primary:hover { background: #e4e4e7; }
+      .btn.ghost { background: transparent; color: var(--fg); border-color: var(--border); }
+      .btn.ghost:hover { border-color: #3f3f46; background: var(--panel); }
+      .shot { margin: 40px 0; }
+      .shot img {
+        width: 100%; height: auto; display: block;
+        border: 1px solid var(--border); border-radius: var(--radius);
+      }
+      section { padding: 28px 0; }
+      h2 { font-size: 24px; letter-spacing: -0.01em; margin: 0 0 8px; }
+      .lead { color: var(--muted); margin: 0 0 20px; max-width: 680px; }
+      .grid { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+      @media (max-width: 680px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 34px; } }
+      .card {
+        background: var(--panel); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 18px;
+      }
+      .card h3 { margin: 0 0 6px; font-size: 16px; }
+      .card p { margin: 0; color: var(--muted); font-size: 14px; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+      th { color: var(--muted); font-weight: 600; }
+      td code { background: var(--panel-2); padding: 2px 6px; border-radius: 6px; font-size: 13px; }
+      .verb { font-weight: 700; font-size: 12px; color: var(--muted); }
+      pre {
+        background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+        padding: 16px; overflow-x: auto; font-size: 13.5px; line-height: 1.55;
+      }
+      code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .note {
+        background: var(--panel); border: 1px solid var(--border);
+        border-left: 3px solid var(--accent-2); border-radius: 8px;
+        padding: 12px 16px; color: var(--muted); font-size: 14px;
+      }
+      footer { border-top: 1px solid var(--border); padding: 28px 0 48px; color: var(--muted); font-size: 14px; }
+      .pill { color: var(--ok); }
+    </style>
+  </head>
+  <body>
+    <header class="site">
+      <div class="wrap">
+        <div class="logo" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <span class="brand">Agent Patient Intake Gateway</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="wrap">
+          <div class="badges">
+            <span class="badge">Play 4 · Agent Intelligence Layer</span>
+            <span class="badge">Healthcare</span>
+            <span class="badge">Built with XanoTS</span>
+          </div>
+          <h1>Same rules for a human and an agent.</h1>
+          <p class="tagline">
+            A governed patient-intake API where a human coordinator, a clinician, and an AI agent call the same
+            permissioned endpoints. Consent checks, PHI masking, and triage rules hold the same for both, and every
+            access lands in one shared audit trail.
+          </p>
+          <p class="meta"><strong>6</strong> tables · <strong>10</strong> APIs · <strong>1</strong> shared function</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="https://github.com/xano-scratch/agent-patient-intake-gateway">View on GitHub</a>
+            <a class="btn ghost" href="#use">Use this template</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="wrap shot">
+        <img src="screenshot.png" alt="The clinician reading the emergent case with PHI in the clear, next to the case list" />
+      </div>
+
+      <section>
+        <div class="wrap">
+          <h2>What it demonstrates</h2>
+          <p class="lead">
+            The point is control, not speed. An agent that triages intake is useful only if it is held to the rules a
+            person is. The human triage endpoint and the agent triage endpoint call the same shared function, so the
+            outcome and the audit are identical. Only the logged actor type differs.
+          </p>
+          <div class="grid">
+            <div class="card">
+              <h3>Consent gate</h3>
+              <p>A case create or update is refused unless the patient holds an active, unexpired treatment consent.</p>
+            </div>
+            <div class="card">
+              <h3>PHI masking by role</h3>
+              <p>A clinician reads date of birth and SSN in the clear. A coordinator and the agent read them masked. Decided at the endpoint, not by a database policy.</p>
+            </div>
+            <div class="card">
+              <h3>Rule-driven triage</h3>
+              <p>The active rule set decides a case's priority. The most severe matching rule wins, for the human path and the agent path alike.</p>
+            </div>
+            <div class="card">
+              <h3>One shared audit</h3>
+              <p>Every read, create, update, and triage writes a row. Human and agent actions land in the same log.</p>
+            </div>
+          </div>
+          <p class="lead" style="margin-top: 20px">
+            Auth is API-layer role-based access control (an auth table, <code>create_auth_token</code>, and a role
+            guard on each endpoint). There is no row-level security anywhere.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap">
+          <h2>API surface</h2>
+          <p class="lead">Ten endpoints under the pinned API group <code>intake</code>.</p>
+          <table>
+            <thead><tr><th>Verb</th><th>Path</th><th>What it enforces</th></tr></thead>
+            <tbody>
+              <tr><td class="verb">POST</td><td><code>/login</code></td><td>Authenticates a seeded user, mints a role-scoped token.</td></tr>
+              <tr><td class="verb">GET</td><td><code>/cases</code></td><td>Case summaries with patient names. No PHI, no audit row.</td></tr>
+              <tr><td class="verb">GET</td><td><code>/cases/{case_id}</code></td><td>Reads one case. Masks PHI by role and logs the read.</td></tr>
+              <tr><td class="verb">POST</td><td><code>/cases</code></td><td>Creates a case. Role guard plus the treatment-consent gate.</td></tr>
+              <tr><td class="verb">POST</td><td><code>/cases/update</code></td><td>Updates a case. Same guards, re-checks required fields.</td></tr>
+              <tr><td class="verb">POST</td><td><code>/cases/triage</code></td><td>Human triage (clinician). Shared engine, actor type human.</td></tr>
+              <tr><td class="verb">POST</td><td><code>/agent/triage</code></td><td>Agent triage (agent service). Same engine, actor type agent.</td></tr>
+              <tr><td class="verb">GET</td><td><code>/access-log</code></td><td>The shared audit trail, filterable by case and actor type.</td></tr>
+              <tr><td class="verb">GET</td><td><code>/patients</code></td><td>A non-PHI patient picker plus the ids with an active consent.</td></tr>
+              <tr><td class="verb">POST</td><td><code>/seed</code></td><td>Idempotent demo seed so the app is browsable at once.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap">
+          <h2>Five screens</h2>
+          <div class="grid">
+            <div class="card"><h3>Role sign-in</h3><p>Sign in as coordinator, clinician, or agent service. The role drives the rest of the app.</p></div>
+            <div class="card"><h3>Case list and create</h3><p>Every case with its status and priority. The create form shows the governed consent rejection.</p></div>
+            <div class="card"><h3>Case detail</h3><p>PHI masked or in the clear by role, the consent status, and a run-triage button with the rule that fired.</p></div>
+            <div class="card"><h3>Agent triage</h3><p>Run one case as the agent and as a clinician, side by side. Same priority, same rule.</p></div>
+            <div class="card"><h3>Audit trail</h3><p>One shared log with human and agent rows together, and the masked flag on each read.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="use">
+        <div class="wrap">
+          <h2>Use this template</h2>
+          <p class="lead">Point your AI coding agent at the repo, or clone it yourself. Either way you get a live, governed Xano backend in about a minute.</p>
+          <pre><code>Start a new Xano app from the template at
+https://github.com/xano-scratch/agent-patient-intake-gateway
+
+Clone it, run: npm install, then npx xanots login,
+then npm run xano:deploy to get a live backend and frontend URL.</code></pre>
+          <p class="lead" style="margin-top: 16px">Or by hand:</p>
+          <pre><code>git clone https://github.com/xano-scratch/agent-patient-intake-gateway
+cd agent-patient-intake-gateway
+npm install
+npx xanots login
+npm run xano:deploy</code></pre>
+          <p class="note" style="margin-top: 18px">
+            The live preview links in the build notes are ephemeral and expire. The durable artifact is this repo:
+            clone it and run <code>npm run xano:deploy</code> for a fresh live environment of your own.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        Agent Patient Intake Gateway · a XanoTS proof artifact · Play 4, healthcare · MIT license
+      </div>
+    </footer>
+  </body>
+</html>
